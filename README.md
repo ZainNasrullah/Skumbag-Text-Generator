@@ -12,6 +12,14 @@ I recently returned to this project but this time with the goal of using the ent
 3. Change data preprocessing to create meaningful divisions between different people talking. Right now it's basically learning a unified and uninterruped stream of messages.
 4. If it works well, consider transforming it into a Discord bot.
 
+Update 2/8/2018:
+- Testing with Shapespeare dataset before applying to skype chats as the former has more structure and is thus easier to learn.
+- Changed data representation to vectorized form as per the Keras documentation. Essentially this is a one-hot-encoded version of the previous ordinal character strategy.
+- Replaced argmax sampling on predictions with argmax on a multinomial experiment of predictions. This allows for greater creativity in the model.
+- Added temperature/disparity. This scales the predictions allowing control over model creativity. Low temperature results in more logical sentences but less creativity.
+- The RMSProp optimizer doesn't seem to converge; replaced with Adam.
+- Implemented the on_epoch_end method provided in the Keras text generation documentation to print a generated sample at various disparities at the end of each epoch. This allows one to keep track of progress.
+
 ## Next Steps
 - Read some papers on state-of-the-art in text generation tasks and apply those here.
 - Perhaps apply the model to the lyrical discographies of musical artists. This particular task is fairly well-known, but it would be interesting to investigate it anyways given that I already have a script for webscraping lyrics (my VisualizingSongLyrics repository).
