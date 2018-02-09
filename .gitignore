@@ -1,6 +1,3 @@
 skumbag-logs.csv
-skumbag-logs_clean.txt
-skumbag-logs_X
-skumbag-logs_Y
-shakespeare_X
-shakespeare_Y
+data/*
+weights/*

@@ -19,7 +19,6 @@ from keras.layers import LSTM
 from keras.callbacks import ModelCheckpoint, LambdaCallback
 from keras.optimizers import Adam, RMSprop
 
-
 def clean_df(text):
     ''' clean the data by removing html tags and artifacts'''
 
@@ -42,58 +41,31 @@ def clean_df(text):
 
     return clean_text
 
-
-def generate_text(model, dataX, input_sequence=None, seq_length=100, word_mode=False):
-    ''' function to generate text from the model after training'''
-
-    # generate seed (starting pattern) and print it out to the screen
-    if input_sequence:
-        pattern = [char_to_int[value] for value in input_sequence]
-        pattern = pattern[-seq_length:]
-    else:
-        start = np.random.randint(0, len(dataX) - 1)
-        pattern = dataX[start]
-
-    print("Seed:")
-    if word_mode:
-        print(' '.join([int_to_char[value] for value in pattern]))
-    else:
-        print(''.join([int_to_char[value] for value in pattern]))
-
-    # generate characters
-    for i in range(seq_length):
-
-        # preprocess
-        x = np.reshape(pattern, (1, len(pattern), 1))
-        x = x / float(n_vocab)
-
-        # Predict probabilities and find index corresponding to largest probability
-        prediction = model.predict(x, verbose=0)
-        index = np.argmax(prediction)
-
-        # append the index to pattern and then drop the first word/character
-        pattern.append(index)
-        pattern = pattern[1:len(pattern)]
-
-    # return the final sequence
-    sequence = ''.join([int_to_char[value] for value in pattern])
-    return sequence
-
-# Settings (eventually move these into arguements)
-train = True
-word_mode = False
+# Primary Settings (transition into arguments)
 source = 'shakespeare'
-clean_source = source + '_clean.txt'
+train = True
+weight_path = "weights//" + source + "_weight"
+
+# Secondary Settings (transition into arguments)
+word_mode = False
 seq_length = 60  # Sequence length to be used in training
 
-# if the text file of the input exists read it, otherwise create from csv
+# if the text file of the input exists then read it, otherwise create from csv
 # (note: original data is in .CSV form)
-if isfile(clean_source):
-    with open(clean_source, 'r') as file:
+source_text = 'input//' + source + '.txt'
+if isfile(source_text):
+    print("Text file found for source:", source_text)
+    with open(source_text, 'r') as file:
         raw_text = file.read()
 else:
+    print("No text file found, defaulting to build from csv.")
     # Read data set
-    df = pd.read_csv(source + '.csv', header=None)
+    try:
+        df = pd.read_csv(source + '.csv', header=None)
+    except FileNotFoundError:
+        print("No csv file found. Terminating.")
+        sys.exit(0)
+        
     df_text = df.iloc[:, 6]
 
     # Clean dataset
@@ -107,7 +79,7 @@ else:
     raw_text = ''.join([x for x in raw_text if ord(x) < 128])
 
     # write output to a file to be loaded next time
-    with open(clean_source, 'w') as file:
+    with open(source_text, 'w') as file:
         file.write(raw_text)
 
 # After preparing string, the data needs to be split if working with words
@@ -130,9 +102,11 @@ print("Total Words / Characters (Depending on Mode): ", n_chars)
 print("Total Vocab: ", n_vocab)
 
 # Load the dataset if it already exists
-if isfile(source + '_X') and isfile(source + '_Y'):
-    X = pickle.load(open(source + '_X', 'rb'))
-    y = pickle.load(open(source + '_Y', 'rb'))
+data_source = 'data//' + source
+if isfile(data_source + '_X') and isfile(data_source + '_Y'):
+    print("Data files found for source:", data_source+'_X'+',', data_source+'_Y')
+    X = pickle.load(open(data_source + '_X', 'rb'))
+    y = pickle.load(open(data_source + '_Y', 'rb'))
 else:
     # prepare the dataset of input to output pairs encoded as integers
     seq_in = []
@@ -151,23 +125,21 @@ else:
             y[i, char_to_int[seq_out[i]]] = 1
 
     # save dataset to avoid overhead in repeatedly creating it
-    pickle.dump(X, open(source + '_X', 'wb'))
-    pickle.dump(y, open(source + '_Y', 'wb'))
+    pickle.dump(X, open(data_source + '_X', 'wb'))
+    pickle.dump(y, open(data_source + '_Y', 'wb'))
 
 # define the LSTM model
 model = Sequential()
-model.add(LSTM(512, input_shape=(
-    X.shape[1], X.shape[2]), return_sequences=True))
+model.add(LSTM(512, input_shape=(X.shape[1], X.shape[2]), return_sequences=True))
 model.add(Dropout(0.2))
 model.add(LSTM(512))
 model.add(Dropout(0.2))
 model.add((Dense(y.shape[1], activation='softmax')))
 
 # define the checkpoint and load weight if applicible
-filepath = source + "_weight"
-if (isfile(filepath)):
+if (isfile(weight_path)):
     print("Loading Weights...")
-    model.load_weights(filepath)
+    model.load_weights(weight_path)
 else:
     print("No weights found... Starting from scratch.")
 
@@ -220,7 +192,7 @@ def on_epoch_end(epoch, logs):
 
 
 # Create call back list to checkpoint and print progress at the end of each epoch
-checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True)
+checkpoint = ModelCheckpoint(weight_path, monitor='loss', verbose=1, save_best_only=True)
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 callbacks_list = [checkpoint, print_callback]
 
