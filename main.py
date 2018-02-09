@@ -42,7 +42,7 @@ def clean_df(text):
     return clean_text
 
 # Primary Settings (transition into arguments)
-source = 'shakespeare'
+source = 'skumbag'
 train = True
 weight_path = "weights//" + source + "_weight"
 
@@ -62,6 +62,7 @@ else:
     # Read data set
     try:
         df = pd.read_csv(source + '.csv', header=None)
+        print("Found", source+'.csv')
     except FileNotFoundError:
         print("No csv file found. Terminating.")
         sys.exit(0)

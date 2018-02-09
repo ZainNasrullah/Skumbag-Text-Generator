@@ -5,7 +5,7 @@ As mentioned in the repository description, I've been playing around with the id
 
 Although I don't have any particular rush on this project, it's an interesting way to play around with a different subset of NLP tasks.
 
-## Current Goals
+## Goals
 I recently returned to this project but this time with the goal of using the entire Skype chat history rather than just one person. There still isn't enough data for a chatbot, so I figured I'd start with text generation. In terms of preprocessing, I've performed basic string cleaning to each message and just grouped everything together such that it is one long string. I'm trying to accomplish the following:
 1. Test the simple model using the larger (entire chat) dataset and qualitatively observe performance with a basic character sequence learning LSTM.
 2. Try playing around with character sequence length, using words instead of characters, and model width/depth
@@ -20,6 +20,8 @@ Update 2/8/2018:
 - The RMSProp optimizer doesn't seem to converge; replaced with Adam.
 - Implemented the on_epoch_end method provided in the Keras text generation documentation to print a generated sample at various disparities at the end of each epoch. This allows one to keep track of progress.
 
-## Next Steps
+The model seems to work well with the Shakespeare text file and generates some fairly good predictions even with only 15 epochs. I suspect this is due, in part, to Shakespeare's writing style and the structure in his work. Comparatively, the Skype logs do not show as much improvement within the first few epochs. The model is still training so we'll see how it performs at the end of its initial 20 epoch run. A meaningful way to improve it would be to consider artificially introducing some structure in the data. For example, divide between the people talking (perhaps present it as a play) and add commas between consecutive messages.
+
+## Potential Future Steps
 - Read some papers on state-of-the-art in text generation tasks and apply those here.
 - Perhaps apply the model to the lyrical discographies of musical artists. This particular task is fairly well-known, but it would be interesting to investigate it anyways given that I already have a script for webscraping lyrics (my VisualizingSongLyrics repository).
