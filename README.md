@@ -13,8 +13,8 @@ I recently returned to this project but this time with the goal of using the ent
 4. If it works well, consider transforming it into a Discord bot.
 
 Update 2/8/2018:
-- Testing with Shapespeare dataset before applying to skype chats as the former has more structure and is thus easier to learn.
-- Changed data representation to vectorized form as per the Keras documentation. Essentially this is a one-hot-encoded version of the previous ordinal character strategy.
+- Testing with [Shapespeare dataset] (https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt) before applying to skype chats as the former has more structure and is thus easier to learn.
+- Changed data representation to vectorized form as per the [Keras documentation] (https://github.com/keras-team/keras/blob/master/examples/lstm_text_generation.py). Essentially this is a one-hot-encoded version of the previous ordinal character strategy.
 - Replaced argmax sampling on predictions with argmax on a multinomial experiment of predictions. This allows for greater creativity in the model.
 - Added temperature/disparity. This scales the predictions allowing control over model creativity. Low temperature results in more logical sentences but less creativity.
 - The RMSProp optimizer doesn't seem to converge; replaced with Adam.
