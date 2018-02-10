@@ -42,7 +42,7 @@ def clean_df(text):
     return clean_text
 
 # Primary Settings (transition into arguments)
-source = 'skumbag'
+source = 'shakespeare'
 train = True
 weight_path = "weights//" + source + "_weight"
 

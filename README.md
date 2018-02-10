@@ -22,6 +22,12 @@ Update 2/8/2018:
 
 The model seems to work well with the Shakespeare text file and generates some fairly good predictions even with only 15 epochs. I suspect this is due, in part, to Shakespeare's writing style and the structure in his work. Comparatively, the Skype logs do not show as much improvement within the first few epochs. The model is still training so we'll see how it performs at the end of its initial 20 epoch run. A meaningful way to improve it would be to consider artificially introducing some structure in the data. For example, divide between the people talking (perhaps present it as a play) and add commas between consecutive messages.
 
+Update 2/10/2018:
+After about 8 iterations, the training loss (for the Skype chats) doesn't show much improvement and the model doesn't qualitatively generate well. As previously mentioned, this is likely due to the lack of structure in the training data. I'll investigate how to tackle that.
+
+Out of interest, I'll add an examples of Shakespeare generated text (at various disparities) to the examples folder after training the model to a cross entropy loss of below 1.0. I'll also try running this script on lyrical data to see how it works.
+- added shakespeare example
+
 ## Potential Future Steps
 - Read some papers on state-of-the-art in text generation tasks and apply those here.
 - Perhaps apply the model to the lyrical discographies of musical artists. This particular task is fairly well-known, but it would be interesting to investigate it anyways given that I already have a script for webscraping lyrics (my VisualizingSongLyrics repository).
