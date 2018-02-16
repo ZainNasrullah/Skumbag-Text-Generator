@@ -1,4 +1,4 @@
-skumbag-logs.csv
+skumbag.csv
 
 data/*
 !data/.gitkeep

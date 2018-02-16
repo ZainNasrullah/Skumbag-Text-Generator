@@ -1,4 +1,4 @@
-# Skumbag-Text-Generator
+# Skype-Text-Generator
 
 ## Context
 As mentioned in the repository description, I've been playing around with the idea of creating a text generator based on a Skype chat group. Initially, the goal of this project was to jokingly create an artifical replacement for one of our friends who's notorious for ignoring messages! I got a hold of the data (omitted from the repository for privacy reasons) a few months ago and tried some basic text generation at a character level. The idea here is that every sequence of k characters can be used to predict the k+1th character thus forming a supervised learning task. This didn't end up working too well... perhaps due to insufficient data (I was trying to model one person) or because of the model architecture (adapted from https://machinelearningmastery.com/text-generation-lstm-recurrent-neural-networks-python-keras/). I then started investigating the alternative of making a chatbot instead using a sequence-to-sequence model instead but soon realized I didn't have nearly enough data to create something meaningful with the personality of one of our group members. So, ultimately, I shelved the project.
@@ -23,10 +23,9 @@ Update 2/8/2018:
 The model seems to work well with the Shakespeare text file and generates some fairly good predictions even with only 15 epochs. I suspect this is due, in part, to Shakespeare's writing style and the structure in his work. Comparatively, the Skype logs do not show as much improvement within the first few epochs. The model is still training so we'll see how it performs at the end of its initial 20 epoch run. A meaningful way to improve it would be to consider artificially introducing some structure in the data. For example, divide between the people talking (perhaps present it as a play) and add commas between consecutive messages.
 
 Update 2/10/2018:
-After about 8 iterations, the training loss (for the Skype chats) doesn't show much improvement and the model doesn't qualitatively generate well. As previously mentioned, this is likely due to the lack of structure in the training data. I'll investigate how to tackle that.
-
-Out of interest, I'll add an examples of Shakespeare generated text (at various disparities) to the examples folder after training the model to a cross entropy loss of below 1.0. I'll also try running this script on lyrical data to see how it works.
-- added shakespeare example
+- After about 8 iterations, the training loss (for the Skype chats) doesn't show much improvement and the model doesn't qualitatively generate well. As previously mentioned, this is likely due to the lack of structure in the training data. I'll investigate how to tackle that.
+- Out of interest, I'll add an examples of Shakespeare generated text (at various disparities) to the examples folder after training the model to a cross entropy loss of below 1.0. I'll also try running this script on lyrical data to see how it works.
+    - added shakespeare example
 
 ## Potential Future Steps
 - Read some papers on state-of-the-art in text generation tasks and apply those here.
